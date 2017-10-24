@@ -42,7 +42,7 @@ public class AdminList extends AdministrationSectionExt {
 		
 		Map<String, String> map = new HashMap<String, String>();
 		
-		map.put("module/cchucsvutils/addObs.form", "cchucsvutils.addobs");
+		map.put("module/cchedataimport/addObs.form", "cchedataimport.addobs");
 		
 		return map;
 	}

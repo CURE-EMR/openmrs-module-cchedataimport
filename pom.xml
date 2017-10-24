@@ -13,7 +13,7 @@
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>CCHE Data Import</name>
-	<description>Helps to import data from different data sources (...intially the FileMaker legacy system) to current CCHE OpenMRS instance.</description>
+	<description>Helps to import data from different data sources (...initially the FileMaker legacy system) to current CCHE OpenMRS instance.</description>
 
 	<url>https://wiki.openmrs.org/x/FQ4z</url>
 
@@ -52,7 +52,47 @@
 		</pluginRepository>
 	</pluginRepositories>
 
-    <properties>
-        <openmrsPlatformVersion>1.11.6</openmrsPlatformVersion>
-    </properties>
+  <properties>
+		<openmrsPlatformVersion>1.11.6</openmrsPlatformVersion>
+		<poiVersion>3.12</poiVersion>
+	</properties>
+
+
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>${poiVersion}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>log4j</groupId>
+					<artifactId>log4j</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>${poiVersion}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>xml-apis</groupId>
+					<artifactId>xml-apis</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>stax</groupId>
+					<artifactId>stax-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>dom4j</groupId>
+					<artifactId>dom4j</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+	</dependencies>
+
 </project>

@@ -9,6 +9,7 @@
  */
 package org.openmrs.module.cchedataimport.web.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -16,7 +17,9 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.User;
+import org.openmrs.api.APIException;
 import org.openmrs.api.UserService;
+import org.openmrs.module.cchedataimport.api.csv.reader.SimpleExcelReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -28,8 +31,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * This class configured as controller using annotation and mapped with the URL of
  * 'module/${rootArtifactid}/${rootArtifactid}Link.form'.
  */
-@Controller("${rootrootArtifactid}.CCHEDataImportController")
-@RequestMapping(value = "module/${rootArtifactid}/${rootArtifactid}.form")
+@Controller("${rootArtifactid}.CCHEDataImportController")
 public class CCHEDataImportController {
 	
 	/** Logger for this class and subclasses */
@@ -45,9 +47,13 @@ public class CCHEDataImportController {
 	 * Initially called after the getUsers method to get the landing form name
 	 * 
 	 * @return String form view name
+	 * @throws IOException 
+	 * @throws APIException 
 	 */
-	@RequestMapping("/module/cchucsvutils/addObs")
-	public String onGet() {
+	@RequestMapping("/module/cchedataimport/addObs")
+	public String onGet() throws APIException, IOException {
+		SimpleExcelReader r = new SimpleExcelReader();
+		r.prepareObsImport();
 		return VIEW;
 	}
 	
