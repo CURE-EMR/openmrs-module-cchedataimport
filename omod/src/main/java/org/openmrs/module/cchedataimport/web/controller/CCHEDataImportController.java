@@ -39,14 +39,14 @@ public class CCHEDataImportController {
 	UserService userService;
 	
 	/** Success form view name */
-	private final String VIEW = "/module/${rootArtifactid}/${rootArtifactid}";
+	private final String VIEW = "/module/cchedataimport/cchedataimport";
 	
 	/**
 	 * Initially called after the getUsers method to get the landing form name
 	 * 
 	 * @return String form view name
 	 */
-	@RequestMapping(method = RequestMethod.GET)
+	@RequestMapping("/module/cchucsvutils/addObs")
 	public String onGet() {
 		return VIEW;
 	}
