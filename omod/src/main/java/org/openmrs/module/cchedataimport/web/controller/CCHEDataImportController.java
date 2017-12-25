@@ -10,22 +10,17 @@
 package org.openmrs.module.cchedataimport.web.controller;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.openmrs.User;
+import org.openmrs.Patient;
 import org.openmrs.api.APIException;
 import org.openmrs.api.UserService;
-import org.openmrs.module.cchedataimport.api.csv.reader.SimpleExcelReader;
+import org.openmrs.api.context.Context;
+import org.openmrs.module.cchedataimport.api.impl.FileMakerObservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
  * This class configured as controller using annotation and mapped with the URL of
@@ -33,61 +28,102 @@ import org.springframework.web.bind.annotation.RequestMethod;
  */
 @Controller("${rootArtifactid}.CCHEDataImportController")
 public class CCHEDataImportController {
-	
-	/** Logger for this class and subclasses */
-	protected final Log log = LogFactory.getLog(getClass());
-	
+
+	@Autowired
+	FileMakerObservationService fileMakerObservationService;
+
 	@Autowired
 	UserService userService;
-	
+
 	/** Success form view name */
 	private final String VIEW = "/module/cchedataimport/cchedataimport";
-	
+
 	/**
 	 * Initially called after the getUsers method to get the landing form name
 	 * 
 	 * @return String form view name
-	 * @throws IOException 
-	 * @throws APIException 
+	 * @throws IOException
+	 * @throws APIException
 	 */
-	@RequestMapping("/module/cchedataimport/addObs")
-	public String onGet() throws APIException, IOException {
-		SimpleExcelReader r = new SimpleExcelReader();
-		r.prepareObsImport();
+	@RequestMapping("/module/cchedataimport/setObsGroup")
+	public String setObsGroup() throws APIException, IOException {
+		fileMakerObservationService.setEncounterObsForm("6842");
 		return VIEW;
 	}
-	
+
 	/**
-	 * All the parameters are optional based on the necessity
+	 * Initially called after the getUsers method to get the landing form name
 	 * 
-	 * @param httpSession
-	 * @param anyRequestObject
-	 * @param errors
-	 * @return
+	 * @return String form view name
+	 * @throws IOException
+	 * @throws APIException
 	 */
-	@RequestMapping(method = RequestMethod.POST)
-	public String onPost(HttpSession httpSession, @ModelAttribute("anyRequestObject") Object anyRequestObject,
-	        BindingResult errors) {
-		
-		if (errors.hasErrors()) {
-			// return error view
+	@RequestMapping("/module/cchedataimport/saveAllPatients")
+	public String saveAllPatients() throws APIException, IOException {
+		List<Patient> allPatients = Context.getPatientService().getAllPatients();
+		for (Patient patient : allPatients) {
+			patient.setDateChanged(new Date());
+			Context.getPatientService().savePatient(patient);
 		}
-		
+
 		return VIEW;
 	}
+
+	@RequestMapping("/module/cchedataimport/addAnswersToCededConcept")
+	public String addAnswersToCededConcept() throws APIException, IOException {
+		fileMakerObservationService.addAnswers();
+		return VIEW;
+	}	
 	
-	/**
-	 * This class returns the form backing object. This can be a string, a boolean, or a normal java
-	 * pojo. The bean name defined in the ModelAttribute annotation and the type can be just defined
-	 * by the return type of this method
-	 */
-	@ModelAttribute("users")
-	protected List<User> getUsers() throws Exception {
-		List<User> users = userService.getAllUsers();
-		
-		// this object will be made available to the jsp page under the variable name
-		// that is defined in the @ModuleAttribute tag
-		return users;
+
+	//Add Obs per form 
+	
+	@RequestMapping("/module/cchedataimport/CleftLipPalateHistoryObs")
+	public String CleftLipPalateHistoryObs() throws APIException, IOException {
+		fileMakerObservationService.createObsForForm("6815",3764);
+		return VIEW;
 	}
-	
+
+	@RequestMapping("/module/cchedataimport/CleftLipPalateOperativeReportObs")
+	public String CleftLipPalateOperativeReportObs() throws APIException, IOException {
+		fileMakerObservationService.createObsForForm("6827",3764);
+		return VIEW;
+	}
+
+	@RequestMapping("/module/cchedataimport/CleftLipPalatePhysicalExamObs")
+	public String CleftLipPalatePhysicalExamObs() throws APIException, IOException {
+		fileMakerObservationService.createObsForForm("6817",3764);
+		return VIEW;
+	}
+
+	@RequestMapping("/module/cchedataimport/CleftLipPalatePlanObs")
+	public String CleftLipPalatePlanObs() throws APIException, IOException {
+		fileMakerObservationService.createObsForForm("6821",3764);
+		return VIEW;
+	}
+
+	@RequestMapping("/module/cchedataimport/createOrthopaedicFollowupObs")
+	public String createOrthopaedicFollowupObs() throws APIException, IOException {
+		fileMakerObservationService.createObsForForm("6842",3764);
+		return VIEW;
+	}
+
+	@RequestMapping("/module/cchedataimport/createOrthopaedicHandPObs")
+	public String createOrthopaedicHandPObs() throws APIException, IOException {
+		fileMakerObservationService.createObsForForm("6834",3764);
+		return VIEW;
+	}
+
+	@RequestMapping("/module/cchedataimport/createOrthopaedicOperativeReportObs")
+	public String createOrthopaedicOperativeReportObs() throws APIException, IOException {
+		fileMakerObservationService.createObsForForm("6843",3764);
+		return VIEW;
+	}
+
+	@RequestMapping("/module/cchedataimport/createOrthopaedicPlanObs")
+	public String createOrthopaedicPlanObs() throws APIException, IOException {
+		fileMakerObservationService.createObsForForm("6823",3764);
+		return VIEW;
+	}
+
 }
