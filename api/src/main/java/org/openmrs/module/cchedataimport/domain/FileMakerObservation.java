@@ -8,12 +8,15 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Proxy;
+
 /**
- * This class represents observation objects as they were stored in the 
- * FileMaker system that was used by CURE Ethiopia. 
- * This class will help in loading the objects from an OpenMRS database.
+ * This class represents observation objects as they were stored in the FileMaker system that was
+ * used by CURE Ethiopia. The aim is to export the data from the FileMaker instance into XLSX files
+ * and with this class, read/load the files into a MysQL database table. We'll then source the table
+ * into the OpenMRS database and leverage Hibernate and the OperMRS API to load instances of this
+ * class an create encounters and obsevations in OpernMRS database.
+ * 
  * @author rubailly
- *
  */
 @Entity
 @Table(name = "filemaker_obs")

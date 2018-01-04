@@ -28,36 +28,116 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller("${rootArtifactid}.CCHEDataImportController")
 public class CCHEDataImportController {
-
+	
 	@Autowired
-	FileMakerObservationService fileMakerObservationService;
-
+	private FileMakerObservationService fileMakerObservationService;
+	
 	@Autowired
 	UserService userService;
-
+	
 	/** Success form view name */
 	private final String VIEW = "/module/cchedataimport/cchedataimport";
-
-	/**
-	 * Initially called after the getUsers method to get the landing form name
-	 * 
-	 * @return String form view name
-	 * @throws IOException
-	 * @throws APIException
-	 */
-	@RequestMapping("/module/cchedataimport/setObsGroup")
-	public String setObsGroup() throws APIException, IOException {
+	
+	//Create Obs per form 
+	
+	@RequestMapping("/module/cchedataimport/createCleftLipPalateHistoryObs")
+	public String createCleftLipPalateHistoryObs() throws APIException, IOException {
+		fileMakerObservationService.createObsForForm("6815");
+		return VIEW;
+	}
+	
+	@RequestMapping("/module/cchedataimport/createCleftLipPalateOperativeReportObs")
+	public String createCleftLipPalateOperativeReportObs() throws APIException, IOException {
+		fileMakerObservationService.createObsForForm("6827");
+		return VIEW;
+	}
+	
+	@RequestMapping("/module/cchedataimport/createCleftLipPalatePhysicalExamObs")
+	public String createCleftLipPalatePhysicalExamObs() throws APIException, IOException {
+		fileMakerObservationService.createObsForForm("6817");
+		return VIEW;
+	}
+	
+	@RequestMapping("/module/cchedataimport/createCleftLipPalatePlanObs")
+	public String createCleftLipPalatePlanObs() throws APIException, IOException {
+		fileMakerObservationService.createObsForForm("6821");
+		return VIEW;
+	}
+	
+	@RequestMapping("/module/cchedataimport/createOrthopaedicFollowupObs")
+	public String createOrthopaedicFollowupObs() throws APIException, IOException {
+		fileMakerObservationService.createObsForForm("6842");
+		return VIEW;
+	}
+	
+	@RequestMapping("/module/cchedataimport/createOrthopaedicHandPObs")
+	public String createOrthopaedicHandPObs() throws APIException, IOException {
+		fileMakerObservationService.createObsForForm("6834");
+		return VIEW;
+	}
+	
+	@RequestMapping("/module/cchedataimport/createOrthopaedicOperativeReportObs")
+	public String createOrthopaedicOperativeReportObs() throws APIException, IOException {
+		fileMakerObservationService.createObsForForm("6843");
+		return VIEW;
+	}
+	
+	@RequestMapping("/module/cchedataimport/createOrthopaedicPlanObs")
+	public String createOrthopaedicPlanObs() throws APIException, IOException {
+		fileMakerObservationService.createObsForForm("6823");
+		return VIEW;
+	}
+	
+	//Set form for encounters and corresponding obs
+	
+	@RequestMapping("/module/cchedataimport/setCleftLipPalateHistory")
+	public String setCleftLipPalateHistory() throws APIException, IOException {
+		fileMakerObservationService.setEncounterObsForm("6815");
+		return VIEW;
+	}
+	
+	@RequestMapping("/module/cchedataimport/setCleftLipPalateOperativeReport")
+	public String setCleftLipPalateOperativeReport() throws APIException, IOException {
+		fileMakerObservationService.setEncounterObsForm("6827");
+		return VIEW;
+	}
+	
+	@RequestMapping("/module/cchedataimport/setCleftLipPalatePhysicalExam")
+	public String setCleftLipPalatePhysicalExam() throws APIException, IOException {
+		fileMakerObservationService.setEncounterObsForm("6817");
+		return VIEW;
+	}
+	
+	@RequestMapping("/module/cchedataimport/setCleftLipPalatePlan")
+	public String setCleftLipPalatePlan() throws APIException, IOException {
+		fileMakerObservationService.setEncounterObsForm("6821");
+		return VIEW;
+	}
+	
+	@RequestMapping("/module/cchedataimport/setOrthopaedicFollowup")
+	public String setOrthopaedicFollowup() throws APIException, IOException {
 		fileMakerObservationService.setEncounterObsForm("6842");
 		return VIEW;
 	}
-
-	/**
-	 * Initially called after the getUsers method to get the landing form name
-	 * 
-	 * @return String form view name
-	 * @throws IOException
-	 * @throws APIException
-	 */
+	
+	@RequestMapping("/module/cchedataimport/setOrthopaedicHP")
+	public String setOrthopaedicHP() throws APIException, IOException {
+		fileMakerObservationService.setEncounterObsForm("6834");
+		return VIEW;
+	}
+	
+	@RequestMapping("/module/cchedataimport/setOrthopaedicOperativeReport")
+	public String setOrthopaedicOperativeReport() throws APIException, IOException {
+		fileMakerObservationService.setEncounterObsForm("6843");
+		return VIEW;
+	}
+	
+	@RequestMapping("/module/cchedataimport/setOrthopaedicPlan")
+	public String setOrthopaedicPlan() throws APIException, IOException {
+		fileMakerObservationService.setEncounterObsForm("6823");
+		return VIEW;
+	}
+	
 	@RequestMapping("/module/cchedataimport/saveAllPatients")
 	public String saveAllPatients() throws APIException, IOException {
 		List<Patient> allPatients = Context.getPatientService().getAllPatients();
@@ -65,65 +145,14 @@ public class CCHEDataImportController {
 			patient.setDateChanged(new Date());
 			Context.getPatientService().savePatient(patient);
 		}
-
+		
 		return VIEW;
 	}
-
+	
 	@RequestMapping("/module/cchedataimport/addAnswersToCededConcept")
 	public String addAnswersToCededConcept() throws APIException, IOException {
 		fileMakerObservationService.addAnswers();
 		return VIEW;
-	}	
+	}
 	
-
-	//Add Obs per form 
-	
-	@RequestMapping("/module/cchedataimport/CleftLipPalateHistoryObs")
-	public String CleftLipPalateHistoryObs() throws APIException, IOException {
-		fileMakerObservationService.createObsForForm("6815",3764);
-		return VIEW;
-	}
-
-	@RequestMapping("/module/cchedataimport/CleftLipPalateOperativeReportObs")
-	public String CleftLipPalateOperativeReportObs() throws APIException, IOException {
-		fileMakerObservationService.createObsForForm("6827",3764);
-		return VIEW;
-	}
-
-	@RequestMapping("/module/cchedataimport/CleftLipPalatePhysicalExamObs")
-	public String CleftLipPalatePhysicalExamObs() throws APIException, IOException {
-		fileMakerObservationService.createObsForForm("6817",3764);
-		return VIEW;
-	}
-
-	@RequestMapping("/module/cchedataimport/CleftLipPalatePlanObs")
-	public String CleftLipPalatePlanObs() throws APIException, IOException {
-		fileMakerObservationService.createObsForForm("6821",3764);
-		return VIEW;
-	}
-
-	@RequestMapping("/module/cchedataimport/createOrthopaedicFollowupObs")
-	public String createOrthopaedicFollowupObs() throws APIException, IOException {
-		fileMakerObservationService.createObsForForm("6842",3764);
-		return VIEW;
-	}
-
-	@RequestMapping("/module/cchedataimport/createOrthopaedicHandPObs")
-	public String createOrthopaedicHandPObs() throws APIException, IOException {
-		fileMakerObservationService.createObsForForm("6834",3764);
-		return VIEW;
-	}
-
-	@RequestMapping("/module/cchedataimport/createOrthopaedicOperativeReportObs")
-	public String createOrthopaedicOperativeReportObs() throws APIException, IOException {
-		fileMakerObservationService.createObsForForm("6843",3764);
-		return VIEW;
-	}
-
-	@RequestMapping("/module/cchedataimport/createOrthopaedicPlanObs")
-	public String createOrthopaedicPlanObs() throws APIException, IOException {
-		fileMakerObservationService.createObsForForm("6823",3764);
-		return VIEW;
-	}
-
 }

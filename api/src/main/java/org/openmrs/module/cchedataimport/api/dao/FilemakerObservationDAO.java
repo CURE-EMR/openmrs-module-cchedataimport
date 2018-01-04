@@ -26,7 +26,8 @@ public class FilemakerObservationDAO {
 		this.sessionFactory = sf;
 	}
 	
-	public List<FileMakerObservation> getAllObs(String encounter) {
+	@SuppressWarnings("unchecked")
+	public List<FileMakerObservation> getObsByEncounterTag(String encounter) {
 		Session session = getCurrentSession();
 		Criteria cr = session.createCriteria(FileMakerObservation.class);
 		cr.add(Restrictions.like("encounter", encounter));
@@ -63,7 +64,7 @@ public class FilemakerObservationDAO {
 		if (null != p) {
 			session.delete(p);
 		}
-	}	
+	}
 	
 	private org.hibernate.Session getCurrentSession() {
 		try {

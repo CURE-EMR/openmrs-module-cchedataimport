@@ -20,34 +20,34 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service("filemakerObsService")
 public class FileMakerObservationService {
-
+	
 	/* Logger for this class and subclasses*/
 	protected final Log log = LogFactory.getLog(getClass());
-
+	
 	@Autowired
 	FilemakerObservationDAO fileMakerObservationDAO;
-
+	
 	@Transactional
-	public List<FileMakerObservation> getAllObs(String encounter) {
-		return fileMakerObservationDAO.getAllObs(encounter);
+	public List<FileMakerObservation> getObsByEncounterTag(String encounter) {
+		return fileMakerObservationDAO.getObsByEncounterTag(encounter);
 	}
-
+	
 	@Transactional
 	public FileMakerObservation getObs(int id) {
 		return fileMakerObservationDAO.getObs(id);
 	}
-
+	
 	@Transactional
 	public void addObs(FileMakerObservation obs) {
 		fileMakerObservationDAO.addObs(obs);
 	}
-
+	
 	@Transactional
 	public void updateObs(FileMakerObservation obs) {
 		fileMakerObservationDAO.updateObs(obs);
-
+		
 	}
-
+	
 	@Transactional
 	public void addAnswers() {
 		ConceptService cs = Context.getConceptService();
@@ -61,48 +61,54 @@ public class FileMakerObservationService {
 		}
 		cs.saveConcept(concept);
 	}
-
+	
 	@Transactional
 	public void deleteObs(int id) {
 		fileMakerObservationDAO.deleteObs(id);
 	}
-
+	
 	@Transactional
-	public void createObsForForm(String formTag, int oldEncounterUUIDConcept) {
+	public void createObsForForm(String formTag) {
 		List<Obs> obs = Context.getObsService().getObservationsByPersonAndConcept(null,
-				Context.getConceptService().getConcept("Form Id"));
+		    Context.getConceptService().getConcept("Form Id"));
+		int i = 0;
 		for (Obs obs2 : obs) {
-			if (obs2.getValueText().equalsIgnoreCase(formTag)) { //Take the encounter if the tag is the for the form we want
+			if (obs2.getValueText().equalsIgnoreCase(formTag)) { //Take the encounter if the tag is for the form we want
 				Encounter e = obs2.getEncounter();
 				for (Obs obs3 : e.getObs()) {
-					if (obs3.getConcept().getConceptId() == oldEncounterUUIDConcept && obs3.getValueText() != null
-							&& obs3.getValueText().length() > 0) { //Take the tag that links the encounter to FileMaker Observations
-
-						List<FileMakerObservation> encounterObs = getAllObs(obs3.getValueText()); //Get all Observations from FileMakerObs table for this encounter
-						if (encounterObs.size() > 0) {
-							for (FileMakerObservation f : encounterObs) {
-								String oldEncounterUUID = f.getEncounter();
-								String c = f.getConcept();
-								String a = f.getAnswer();
-								String co = f.getComment();
-								if (oldEncounterUUID != null && oldEncounterUUID.length() > 0 && c != null && c.length() > 0
-										&& FileMakerObservationUtil.getConceptFormText(c) != null) {
-									FileMakerObservationUtil.createObs(oldEncounterUUID, FileMakerObservationUtil.getConceptFormText(c), a, co, e);
-
+					if (obs3.getConcept().getConceptId() == 3764 && obs3.getValueText() != null
+					        && obs3.getValueText().length() > 0) { //Take the tag that links the encounter to FileMaker Observations
+					
+						List<FileMakerObservation> fileMakerObservations = getObsByEncounterTag(obs3.getValueText()); //Get all Observations from FileMakerObs table for this encounter
+						if (fileMakerObservations.size() > 0) {
+							for (FileMakerObservation fileMakerObs : fileMakerObservations) {
+								String encounterTag = fileMakerObs.getEncounter();
+								String fileMakerObsConcept = fileMakerObs.getConcept();
+								String fileMakerObsAnswer = fileMakerObs.getAnswer();
+								String fileMakerObsComment = fileMakerObs.getComment();
+								if (encounterTag != null && encounterTag.length() > 0 && fileMakerObsConcept != null
+								        && fileMakerObsConcept.length() > 0
+								        && FileMakerObservationUtil.getConceptFormText(fileMakerObsConcept, formTag) != null) {
+									
+									FileMakerObservationUtil.createObs(encounterTag,
+									    FileMakerObservationUtil.getConceptFormText(fileMakerObsConcept, formTag),
+									    fileMakerObsAnswer, fileMakerObsComment, e, formTag);
+									
 								}
 							}
 						}
-
+						
 					}
 				}
+				log.error(++i + ".===Turangije encounter " + e.getId());
 			}
 		}
-
+		
 	}
-
+	
 	public void setEncounterObsForm(String formId) {
 		FileMakerObservationUtil.setEncounterObsForm(formId);
-
+		
 	}
-
+	
 }

@@ -43,19 +43,41 @@ public class AdminList extends AdministrationSectionExt {
 		
 		Map<String, String> map = new HashMap<String, String>();
 		
-		map.put("module/cchedataimport/setObsGroup.form", "cchedataimport.setObsGroup");
-		map.put("module/cchedataimport/addAnswersToCededConcept.form", "cchedataimport.addAnswersToCededConcept");
-		map.put("module/cchedataimport/saveAllPatients.form", "cchedataimport.saveAllPatients");	
+		//This is to help migrate diagnosis and treatment terms
 		
-		map.put("module/cchedataimport/CleftLipPalateHistoryObs.form", "cchedataimport.CleftLipPalateHistoryObs");
-		map.put("module/cchedataimport/CleftLipPalateOperativeReportObs.form", "cchedataimport.CleftLipPalateOperativeReportObs");
-		map.put("module/cchedataimport/CleftLipPalatePhysicalExamObs.form", "cchedataimport.CleftLipPalatePhysicalExamObs");
-		map.put("module/cchedataimport/CleftLipPalatePlanObs.form", "cchedataimport.CleftLipPalatePlanObs");
+		map.put("module/cchedataimport/addAnswersToCededConcept.form", "cchedataimport.addAnswersToCededConcept");
+		
+		//This is to help trigger sync for patients to the OpenELIS and OpenERP/Odoo
+		
+		map.put("module/cchedataimport/saveAllPatients.form", "cchedataimport.saveAllPatients");
+		
+		//Create obs by form
+		
+		map.put("module/cchedataimport/createCleftLipPalateHistoryObs.form", "cchedataimport.createCleftLipPalateHistoryObs");
+		map.put("module/cchedataimport/createCleftLipPalateOperativeReportObs.form",
+		    "cchedataimport.createCleftLipPalateOperativeReportObs");
+		map.put("module/cchedataimport/createCleftLipPalatePhysicalExamObs.form",
+		    "cchedataimport.createCleftLipPalatePhysicalExamObs");
+		map.put("module/cchedataimport/createCleftLipPalatePlanObs.form", "cchedataimport.createCleftLipPalatePlanObs");
 		
 		map.put("module/cchedataimport/createOrthopaedicFollowupObs.form", "cchedataimport.createOrthopaedicFollowupObs");
 		map.put("module/cchedataimport/createOrthopaedicHandPObs.form", "cchedataimport.createOrthopaedicHandPObs");
-		map.put("module/cchedataimport/createOrthopaedicOperativeReportObs.form", "cchedataimport.createOrthopaedicOperativeReportObs");
+		map.put("module/cchedataimport/createOrthopaedicOperativeReportObs.form",
+		    "cchedataimport.createOrthopaedicOperativeReportObs");
 		map.put("module/cchedataimport/createOrthopaedicPlanObs.form", "cchedataimport.createOrthopaedicPlanObs");
+		
+		//Adding obs grouping by form (forms on encounters)
+		
+		map.put("module/cchedataimport/setCleftLipPalateHistory.form", "cchedataimport.setCleftLipPalateHistory");
+		map.put("module/cchedataimport/setCleftLipPalateOperativeReport.form",
+		    "cchedataimport.setCleftLipPalateOperativeReport");
+		map.put("module/cchedataimport/setCleftLipPalatePhysicalExam.form", "cchedataimport.setCleftLipPalatePhysicalExam");
+		map.put("module/cchedataimport/setCleftLipPalatePlan.form", "cchedataimport.setCleftLipPalatePlan");
+		
+		map.put("module/cchedataimport/setOrthopaedicFollowup.form", "cchedataimport.setOrthopaedicFollowup");
+		map.put("module/cchedataimport/setOrthopaedicHP.form", "cchedataimport.setOrthopaedicHP");
+		map.put("module/cchedataimport/setOrthopaedicOperativeReport.form", "cchedataimport.setOrthopaedicOperativeReport");
+		map.put("module/cchedataimport/setOrthopaedicPlan.form", "cchedataimport.setOrthopaedicPlan");
 		
 		return map;
 	}
