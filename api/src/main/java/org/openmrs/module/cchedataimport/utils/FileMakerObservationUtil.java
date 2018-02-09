@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -136,6 +137,48 @@ public class FileMakerObservationUtil {
 		
 		for (Obs o : obs) {
 			if (o.getValueText().equalsIgnoreCase(formId)) {
+				encountersToUpdate.add(o.getEncounter());
+			}
+		}
+		
+		if (formConcept != null) {
+			String voidReason = formConcept.getDisplayString();
+			int i = 0;
+			for (Encounter e : encountersToUpdate) {
+				Obs o = new Obs();
+				o.setConcept(formConcept);
+				o.setPerson(e.getPatient().getPerson());
+				o.setObsDatetime(e.getEncounterDatetime());
+				o.setDateCreated(e.getDateCreated());
+				o.setCreator(e.getCreator());
+				o.setLocation(e.getLocation());
+				o.setEncounter(e);
+				
+				for (Obs obs2 : e.getAllObs()) {
+					if (!obs2.getConcept().equals(formConcept)) {
+						o.addGroupMember(obs2);
+					}
+					
+				}
+				
+				Context.getObsService().saveObs(o, "Adding Form Id -" + voidReason);
+				log.error(++i + ".===Turangije encounter " + e.getId());
+			}
+			
+		}
+	}
+	
+	public static void setSkippedEncounterObsForm(String formId) {
+		List<String> skippedVisits = Arrays.asList(Context.getAdministrationService().getGlobalProperty("cchedataimport.skippedVisits").split("|"));
+		List<Encounter> encountersToUpdate = new ArrayList<Encounter>();
+		
+		Concept formConcept = getConceptFromFormId(Integer.valueOf(formId));
+		ConceptService cs = Context.getConceptService();
+		Concept c = cs.getConcept("Old Encounter UUID");
+		List<Obs> obs = Context.getObsService().getObservationsByPersonAndConcept(null, c);
+		
+		for (Obs o : obs) {
+			if (skippedVisits.contains(o.getValueText()) && !o.isVoided()) {
 				encountersToUpdate.add(o.getEncounter());
 			}
 		}

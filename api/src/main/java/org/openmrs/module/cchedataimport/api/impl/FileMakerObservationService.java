@@ -1,5 +1,6 @@
 package org.openmrs.module.cchedataimport.api.impl;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -106,8 +107,53 @@ public class FileMakerObservationService {
 		
 	}
 	
+	@Transactional
+	public void createSkippedObsForForm(String formTag) {
+		List<String> skippedVisits = Arrays.asList(Context.getAdministrationService().getGlobalProperty("cchedataimport.skippedVisits").split("|"));
+		List<Obs> obs = Context.getObsService().getObservationsByPersonAndConcept(null,
+		    Context.getConceptService().getConcept("Form Id"));
+		int i = 0;
+		for (Obs obs2 : obs) {
+			if (obs2.getValueText().equalsIgnoreCase(formTag)) { //Take the encounter if the tag is for the form we want
+				Encounter e = obs2.getEncounter();
+				for (Obs obs3 : e.getObs()) {
+					if (obs3.getConcept().getConceptId() == 3764 && obs3.getValueText() != null
+					        && obs3.getValueText().length() > 0 && skippedVisits.contains(obs3.getValueText())) { //Take the tag that links the encounter to FileMaker Observations
+					
+						List<FileMakerObservation> fileMakerObservations = getObsByEncounterTag(obs3.getValueText()); //Get all Observations from FileMakerObs table for this encounter
+						if (fileMakerObservations.size() > 0) {
+							for (FileMakerObservation fileMakerObs : fileMakerObservations) {
+								String encounterTag = fileMakerObs.getEncounter();
+								String fileMakerObsConcept = fileMakerObs.getConcept();
+								String fileMakerObsAnswer = fileMakerObs.getAnswer();
+								String fileMakerObsComment = fileMakerObs.getComment();
+								if (encounterTag != null && encounterTag.length() > 0 && fileMakerObsConcept != null
+								        && fileMakerObsConcept.length() > 0
+								        && FileMakerObservationUtil.getConceptFormText(fileMakerObsConcept, formTag) != null) {
+									
+									FileMakerObservationUtil.createObs(encounterTag,
+									    FileMakerObservationUtil.getConceptFormText(fileMakerObsConcept, formTag),
+									    fileMakerObsAnswer, fileMakerObsComment, e, formTag);
+									
+								}
+							}
+						}
+						
+					}
+				}
+				log.error(++i + ".===Turangije encounter " + e.getId());
+			}
+		}
+		
+	}
+	
 	public void setEncounterObsForm(String formId) {
 		FileMakerObservationUtil.setEncounterObsForm(formId);
+		
+	}
+	
+	public void setSkippedEncounterObsForm(String formId) {
+		FileMakerObservationUtil.setSkippedEncounterObsForm(formId);
 		
 	}
 	

@@ -79,6 +79,10 @@ public class AdminList extends AdministrationSectionExt {
 		map.put("module/cchedataimport/setOrthopaedicOperativeReport.form", "cchedataimport.setOrthopaedicOperativeReport");
 		map.put("module/cchedataimport/setOrthopaedicPlan.form", "cchedataimport.setOrthopaedicPlan");
 		
+		//Import obs from skipped visits in the initial import
+		map.put("module/cchedataimport/importSkippedOrthopaedicFollowupObs.form", "cchedataimport.importSkippedOrthopaedicFollowupObs");
+		map.put("module/cchedataimport/setSkippedOrthopaedicFollowupObs.form", "cchedataimport.setSkippedOrthopaedicFollowupObs");
+		
 		return map;
 	}
 	

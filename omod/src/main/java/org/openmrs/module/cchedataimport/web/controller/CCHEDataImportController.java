@@ -138,6 +138,18 @@ public class CCHEDataImportController {
 		return VIEW;
 	}
 	
+	@RequestMapping("/module/cchedataimport/importSkippedOrthopaedicFollowupObs")
+	public String importSkippedOrthopaedicFollowupObs() throws APIException, IOException {
+		fileMakerObservationService.createSkippedObsForForm("6842");
+		return VIEW;
+	}
+	
+	@RequestMapping("/module/cchedataimport/setSkippedOrthopaedicFollowupObs")
+	public String setSkippedOrthopaedicFollowupObs() throws APIException, IOException {
+		fileMakerObservationService.setEncounterObsForm("6842");
+		return VIEW;
+	}
+	
 	@RequestMapping("/module/cchedataimport/saveAllPatients")
 	public String saveAllPatients() throws APIException, IOException {
 		List<Patient> allPatients = Context.getPatientService().getAllPatients();
