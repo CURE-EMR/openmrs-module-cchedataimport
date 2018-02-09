@@ -46,10 +46,10 @@
 	 /Required Privileges -->
 	 
 	 <globalProperty>
-		<property>cchedataimport.fileNameConceptMap</property>
+		<property>cchedataimport.skippedVisits</property>
 		<defaultValue></defaultValue>
 		<description>
-			Mappings between file names and concepts from which observations should be created
+			Pipe separated list of encounter tags that were skipped during the initial import
 		</description>
 	</globalProperty>
 

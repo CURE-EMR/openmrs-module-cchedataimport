@@ -90,7 +90,21 @@ public class ConceptNameToConceptIdMapping {
 		ConceptService cs = Context.getConceptService();
 		Concept c = null;
 		
-		if (text.equalsIgnoreCase("Preop Diagnosis")) {
+		if (text.equalsIgnoreCase("Dr. Eric Gokcen") || text.equalsIgnoreCase("Eric Gokcen, MD")) {
+			c = cs.getConcept(3640);
+		} else if (text.equalsIgnoreCase("Dr. Mesfin Etsub") || text.equalsIgnoreCase("Mesfin Etsub, MD")) {
+			c = cs.getConcept(3641);
+		} else if (text.equalsIgnoreCase("Dr. Tewodros Tilahun") || text.equalsIgnoreCase("Tewodros Tilahun, MD")) {
+			c = cs.getConcept(3643);
+		} else if (text.equalsIgnoreCase("Dr. Francis Nyirro") || text.equalsIgnoreCase("Francis Nyirro, MD")) {
+			c = cs.getConcept(17107);
+		} else if (text.equalsIgnoreCase("Dr. Biruk Wamisho") || text.equalsIgnoreCase("Biruk Wamisho, MD")) {
+			c = cs.getConcept(3642);
+		} else if (text.equalsIgnoreCase("Dr Tim Nunn") || text.equalsIgnoreCase("Tim Nunn, MD")) {
+			c = cs.getConcept(17106);
+		} else if (text.equalsIgnoreCase("Other:") || text.equalsIgnoreCase("Other")) {
+			c = cs.getConcept(3644);
+		} else if (text.equalsIgnoreCase("Preop Diagnosis")) {
 			c = cs.getConcept(3651);
 		} else if (text.equalsIgnoreCase("Postop Diagnosis")) {
 			c = cs.getConcept(3652);
@@ -102,6 +116,20 @@ public class ConceptNameToConceptIdMapping {
 			c = cs.getConcept(3655);
 		} else if (text.equalsIgnoreCase("Anesthesia")) {
 			c = cs.getConcept(3660);
+		} else if (text.equalsIgnoreCase("GA")) {
+			c = cs.getConcept(3656);
+		} else if (text.equalsIgnoreCase("MAC")) {
+			c = cs.getConcept(3657);
+		} else if (text.equalsIgnoreCase("Other")) {
+			c = cs.getConcept(1033);
+		} else if (text.equalsIgnoreCase("Regional")) {
+			c = cs.getConcept(3658);
+		} else if (text.equalsIgnoreCase("Spinal")) {
+			c = cs.getConcept(3659);
+		} else if (text.equalsIgnoreCase("Local")) {
+			c = cs.getConcept(3683);
+		} else if (text.equalsIgnoreCase("Block (enter in comments)")) {
+			c = cs.getConcept(3726);
 		} else if (text.equalsIgnoreCase("Detailed Report")) {
 			c = cs.getConcept(3661);
 		} else if (text.equalsIgnoreCase("Comments")) {

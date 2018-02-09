@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
 import org.openmrs.Encounter;
 import org.openmrs.Obs;
@@ -14,6 +16,9 @@ import org.openmrs.api.ConceptService;
 import org.openmrs.api.context.Context;
 
 public class FileMakerObservationUtil {
+	
+	/* Logger for this class and subclasses*/
+	protected final static Log log = LogFactory.getLog(FileMakerObservationUtil.class);
 	
 	/**
 	 * Creates an observation for the given concept on the given encounter
@@ -39,6 +44,9 @@ public class FileMakerObservationUtil {
 					o = new Obs();
 					o.setConcept(question);
 					o.setValueCoded(valueCoded);
+					if(obsComment !=null && obsComment.length() > 0){
+						o.setComment(obsComment);
+					}
 				}
 			}
 			catch (Exception e2) {}
@@ -72,6 +80,10 @@ public class FileMakerObservationUtil {
 	
 	public static Concept getConceptFormText(String text, String formTag) {
 		Concept c = null;
+		
+		if (formTag.equalsIgnoreCase("6843")) {
+			return ConceptNameToConceptIdMapping.getOrthopaedicOperativeReportMappings(text);
+		}
 		
 		if (formTag.equalsIgnoreCase("6842")) {
 			return ConceptNameToConceptIdMapping.getOrthopaedicFollowupMappings(text);
@@ -130,7 +142,7 @@ public class FileMakerObservationUtil {
 		
 		if (formConcept != null) {
 			String voidReason = formConcept.getDisplayString();
-			
+			int i = 0;
 			for (Encounter e : encountersToUpdate) {
 				Obs o = new Obs();
 				o.setConcept(formConcept);
@@ -149,6 +161,7 @@ public class FileMakerObservationUtil {
 				}
 				
 				Context.getObsService().saveObs(o, "Adding Form Id -" + voidReason);
+				log.error(++i + ".===Turangije encounter " + e.getId());
 			}
 			
 		}
@@ -184,6 +197,7 @@ public class FileMakerObservationUtil {
 				break;
 			case 6834:
 				c = cs.getConcept("Orthopaedic H&P");
+				break;
 			case 6843:
 				c = cs.getConcept("Orthopaedic Operative Report");
 				break;
