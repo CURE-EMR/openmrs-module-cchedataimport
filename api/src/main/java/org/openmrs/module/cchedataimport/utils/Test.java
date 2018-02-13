@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * This class should be replaced by a unit test class. This was only added to speed up the test when
@@ -19,6 +20,7 @@ public class Test {
 		BufferedReader br = null;
 		String line = "";
 		String cvsSplitBy = "\\|";
+		ArrayList<String> diagnosis = new ArrayList<String>();
 		String[] country = null;
 		try {
 			
@@ -31,6 +33,10 @@ public class Test {
 			}
 			int i = 0;
 			for (String string : country) {
+				diagnosis.add(string.trim());
+			}
+			
+			for (String string : diagnosis) {
 				System.out.println(++i + "========" + string);
 			}
 			

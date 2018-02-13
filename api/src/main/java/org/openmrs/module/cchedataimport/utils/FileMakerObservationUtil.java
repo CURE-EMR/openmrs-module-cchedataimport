@@ -4,7 +4,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -30,8 +29,7 @@ public class FileMakerObservationUtil {
 	 * @param obsAnswer
 	 * @return
 	 */
-	public static Obs createObs(String oldEncounterUUID, Concept question, String obsValue, String obsComment, Encounter e,
-	        String formTag) {
+	public static Obs createObs(String oldEncounterUUID, Concept question, String obsValue, String obsComment, Encounter e, String formTag) {
 		Obs o = null;
 		if (question.getDatatype().isText() && obsComment != null && obsComment.length() > 0) {
 			o = new Obs();
@@ -45,7 +43,7 @@ public class FileMakerObservationUtil {
 					o = new Obs();
 					o.setConcept(question);
 					o.setValueCoded(valueCoded);
-					if(obsComment !=null && obsComment.length() > 0){
+					if (obsComment != null && obsComment.length() > 0) {
 						o.setComment(obsComment);
 					}
 				}
@@ -169,7 +167,7 @@ public class FileMakerObservationUtil {
 	}
 	
 	public static void setSkippedEncounterObsForm(String formId) {
-		List<String> skippedVisits = Arrays.asList(Context.getAdministrationService().getGlobalProperty("cchedataimport.skippedVisits").split("|"));
+		List<String> skippedVisits = new CSVReader().readSkippedVisits();
 		List<Encounter> encountersToUpdate = new ArrayList<Encounter>();
 		
 		Concept formConcept = getConceptFromFormId(Integer.valueOf(formId));
@@ -178,7 +176,7 @@ public class FileMakerObservationUtil {
 		List<Obs> obs = Context.getObsService().getObservationsByPersonAndConcept(null, c);
 		
 		for (Obs o : obs) {
-			if (skippedVisits.contains(o.getValueText()) && !o.isVoided()) {
+			if (skippedVisits.contains(o.getValueText().trim()) && !o.isVoided()) {
 				encountersToUpdate.add(o.getEncounter());
 			}
 		}

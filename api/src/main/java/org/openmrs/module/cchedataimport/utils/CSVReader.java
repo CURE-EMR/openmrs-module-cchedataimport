@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -36,6 +37,47 @@ public class CSVReader {
 			br = new BufferedReader(new FileReader(csvFile));
 			while ((line = br.readLine()) != null) {
 				diagnosis = line.split(cvsSplitBy);
+			}
+			
+		}
+		catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		finally {
+			if (br != null) {
+				try {
+					br.close();
+				}
+				catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return diagnosis;
+		
+	}
+	
+	public ArrayList<String> readSkippedVisits() {
+		
+		String csvFile = "/opt/openmrs/modules/skippedVisits.txt";
+		BufferedReader br = null;
+		String line = "";
+		String cvsSplitBy = "\\|";
+		String[] untrimed = null;
+		ArrayList<String> diagnosis = new ArrayList<String>();
+		
+		try {
+			
+			br = new BufferedReader(new FileReader(csvFile));
+			while ((line = br.readLine()) != null) {
+				untrimed = line.split(cvsSplitBy);
+			}
+			
+			for (String string : untrimed) {
+				diagnosis.add(string.trim());
 			}
 			
 		}

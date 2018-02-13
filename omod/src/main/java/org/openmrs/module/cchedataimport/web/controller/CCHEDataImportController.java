@@ -146,7 +146,7 @@ public class CCHEDataImportController {
 	
 	@RequestMapping("/module/cchedataimport/setSkippedOrthopaedicFollowupObs")
 	public String setSkippedOrthopaedicFollowupObs() throws APIException, IOException {
-		fileMakerObservationService.setEncounterObsForm("6842");
+		fileMakerObservationService.setSkippedEncounterObsForm("6842");
 		return VIEW;
 	}
 	
