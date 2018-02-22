@@ -9,6 +9,8 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
+import org.openmrs.Encounter;
+import org.openmrs.Obs;
 import org.openmrs.module.cchedataimport.domain.FileMakerObservation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -33,6 +35,16 @@ public class FilemakerObservationDAO {
 		cr.add(Restrictions.like("encounter", encounter));
 		List<FileMakerObservation> obsList = cr.list();
 		return obsList;
+	}
+	
+	public FileMakerObservation getAuthorObsByEncounterTag(String encounter) {
+		FileMakerObservation o = null;
+		Session session = getCurrentSession();
+		Criteria cr = session.createCriteria(FileMakerObservation.class);
+		cr.add(Restrictions.eq("concept", "Author"));
+		cr.add(Restrictions.eq("encounter", encounter));
+		o = (FileMakerObservation) cr.list().get(0);
+		return o;
 	}
 	
 	public FileMakerObservation getObs(int id) {

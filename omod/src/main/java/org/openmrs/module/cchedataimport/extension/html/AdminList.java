@@ -9,11 +9,14 @@
  */
 package org.openmrs.module.cchedataimport.extension.html;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.openmrs.api.APIException;
 import org.openmrs.module.Extension;
 import org.openmrs.module.web.extension.AdministrationSectionExt;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * This class defines the links that will appear on the administration page under the
@@ -54,23 +57,20 @@ public class AdminList extends AdministrationSectionExt {
 		//Create obs by form
 		
 		map.put("module/cchedataimport/createCleftLipPalateHistoryObs.form", "cchedataimport.createCleftLipPalateHistoryObs");
-		map.put("module/cchedataimport/createCleftLipPalateOperativeReportObs.form",
-		    "cchedataimport.createCleftLipPalateOperativeReportObs");
-		map.put("module/cchedataimport/createCleftLipPalatePhysicalExamObs.form",
-		    "cchedataimport.createCleftLipPalatePhysicalExamObs");
+		map.put("module/cchedataimport/createCleftLipPalateOperativeReportObs.form", "cchedataimport.createCleftLipPalateOperativeReportObs");
+		map.put("module/cchedataimport/createCleftLipPalatePhysicalExamObs.form", "cchedataimport.createCleftLipPalatePhysicalExamObs");
 		map.put("module/cchedataimport/createCleftLipPalatePlanObs.form", "cchedataimport.createCleftLipPalatePlanObs");
 		
 		map.put("module/cchedataimport/createOrthopaedicFollowupObs.form", "cchedataimport.createOrthopaedicFollowupObs");
 		map.put("module/cchedataimport/createOrthopaedicHandPObs.form", "cchedataimport.createOrthopaedicHandPObs");
-		map.put("module/cchedataimport/createOrthopaedicOperativeReportObs.form",
-		    "cchedataimport.createOrthopaedicOperativeReportObs");
+		map.put("module/cchedataimport/createOrthopaedicOperativeReportObs.form", "cchedataimport.createOrthopaedicOperativeReportObs");
 		map.put("module/cchedataimport/createOrthopaedicPlanObs.form", "cchedataimport.createOrthopaedicPlanObs");
+		map.put("module/cchedataimport/createPhysicalTherapyObs.form", "cchedataimport.createPhysicalTherapyObs");
 		
 		//Adding obs grouping by form (forms on encounters)
 		
 		map.put("module/cchedataimport/setCleftLipPalateHistory.form", "cchedataimport.setCleftLipPalateHistory");
-		map.put("module/cchedataimport/setCleftLipPalateOperativeReport.form",
-		    "cchedataimport.setCleftLipPalateOperativeReport");
+		map.put("module/cchedataimport/setCleftLipPalateOperativeReport.form", "cchedataimport.setCleftLipPalateOperativeReport");
 		map.put("module/cchedataimport/setCleftLipPalatePhysicalExam.form", "cchedataimport.setCleftLipPalatePhysicalExam");
 		map.put("module/cchedataimport/setCleftLipPalatePlan.form", "cchedataimport.setCleftLipPalatePlan");
 		
@@ -78,12 +78,17 @@ public class AdminList extends AdministrationSectionExt {
 		map.put("module/cchedataimport/setOrthopaedicHP.form", "cchedataimport.setOrthopaedicHP");
 		map.put("module/cchedataimport/setOrthopaedicOperativeReport.form", "cchedataimport.setOrthopaedicOperativeReport");
 		map.put("module/cchedataimport/setOrthopaedicPlan.form", "cchedataimport.setOrthopaedicPlan");
+		map.put("module/cchedataimport/setPhysicalTherapy.form", "cchedataimport.setPhysicalTherapy");
 		
 		//Import obs from skipped visits in the initial import
-		map.put("module/cchedataimport/importSkippedOrthopaedicFollowupObs.form",
-		    "cchedataimport.importSkippedOrthopaedicFollowupObs");
-		map.put("module/cchedataimport/setSkippedOrthopaedicFollowupObs.form",
-		    "cchedataimport.setSkippedOrthopaedicFollowupObs");
+		map.put("module/cchedataimport/importSkippedOrthopaedicFollowupObs.form", "cchedataimport.importSkippedOrthopaedicFollowupObs");
+		map.put("module/cchedataimport/setSkippedOrthopaedicFollowupObs.form", "cchedataimport.setSkippedOrthopaedicFollowupObs");
+		
+		map.put("module/cchedataimport/importSkippedOrthopaedicOperativeReportObs.form", "cchedataimport.importSkippedOrthopaedicOperativeReportObs");
+		map.put("module/cchedataimport/setSkippedOrthopaedicOperativeReportObs.form", "cchedataimport.setSkippedOrthopaedicOperativeReportObs");
+		
+		//Set Author comment
+		map.put("module/cchedataimport/setOrthopedicAuthorComment.form", "cchedataimport.setOrthopedicAuthorComment");
 		
 		return map;
 	}

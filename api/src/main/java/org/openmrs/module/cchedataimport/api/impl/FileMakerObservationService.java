@@ -1,6 +1,10 @@
 package org.openmrs.module.cchedataimport.api.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -30,6 +34,11 @@ public class FileMakerObservationService {
 	@Transactional
 	public List<FileMakerObservation> getObsByEncounterTag(String encounter) {
 		return fileMakerObservationDAO.getObsByEncounterTag(encounter);
+	}
+	
+	@Transactional
+	public FileMakerObservation getAuthorObsByEncounterTag(String encounter) {
+		return fileMakerObservationDAO.getAuthorObsByEncounterTag(encounter);
 	}
 	
 	@Transactional
@@ -79,9 +88,7 @@ public class FileMakerObservationService {
 					
 					//Take the tag that links the encounter to FileMaker Observations
 					
-					if (obs3.getConcept().getConceptId() == 3764 && obs3.getValueText() != null
-					        
-					        && obs3.getValueText().length() > 0) {
+					if (obs3.getConcept().getConceptId() == 3764 && obs3.getValueText() != null && obs3.getValueText().length() > 0) {
 						
 						//Get all Observations from FileMakerObs table for this encounter
 						
@@ -110,39 +117,99 @@ public class FileMakerObservationService {
 	
 	@Transactional
 	public void createSkippedObsForForm(String formTag) {
+		List<Obs> toIterate = new ArrayList<Obs>();
 		List<String> skippedVisits = new CSVReader().readSkippedVisits();
-		List<Obs> obs = Context.getObsService().getObservationsByPersonAndConcept(null, Context.getConceptService().getConcept("Form Id"));
-		int i = 0;
+		
+		ConceptService cs = Context.getConceptService();
+		Concept c = cs.getConcept("Old Encounter UUID");
+		List<Obs> obs = Context.getObsService().getObservationsByPersonAndConcept(null, c);
+		
 		for (Obs obs2 : obs) {
-			// Take the encounter if the tag is for the form we want
-			if (obs2.getValueText().equalsIgnoreCase(formTag) && !obs2.isVoided()) {
+			if (!obs2.isVoided() && obs2.getValueText() != null && obs2.getValueText().length() > 1 && skippedVisits.contains(obs2.getValueText().trim())) {
+				toIterate.add(obs2);
+			}
+		}
+		int i = 0;
+		
+		try {
+			
+			for (Obs obs2 : toIterate) {
 				Encounter e = obs2.getEncounter();
-				for (Obs obs3 : e.getObs()) {
-					
-					//Take the tag that links the encounter to FileMaker  Observations
-					
-					if (obs3.getConcept().getConceptId() == 3764 && obs3.getValueText() != null && obs3.getValueText().length() > 0 && skippedVisits.contains(obs3.getValueText().trim()) && !obs3.isVoided()) {
-						//Get all Observations from FileMakerObs table for this encounter
-						
-						List<FileMakerObservation> fileMakerObservations = getObsByEncounterTag(obs3.getValueText());
-						if (fileMakerObservations.size() > 0) {
-							for (FileMakerObservation fileMakerObs : fileMakerObservations) {
-								String encounterTag = fileMakerObs.getEncounter();
-								String fileMakerObsConcept = fileMakerObs.getConcept();
-								String fileMakerObsAnswer = fileMakerObs.getAnswer();
-								String fileMakerObsComment = fileMakerObs.getComment();
-								if (encounterTag != null && encounterTag.length() > 0 && fileMakerObsConcept != null && fileMakerObsConcept.length() > 0 && FileMakerObservationUtil.getConceptFormText(fileMakerObsConcept, formTag) != null) {
-									
-									FileMakerObservationUtil.createObs(encounterTag, FileMakerObservationUtil.getConceptFormText(fileMakerObsConcept, formTag), fileMakerObsAnswer, fileMakerObsComment, e, formTag);
-									
-								}
-							}
+				
+				log.error("==============Encounter tugezeho====================" + obs2.getValueText());
+				//Get all Observations from FileMakerObs table for this encounter
+				
+				List<FileMakerObservation> fileMakerObservations = getObsByEncounterTag(obs2.getValueText());
+				if (fileMakerObservations.size() > 0) {
+					for (FileMakerObservation fileMakerObs : fileMakerObservations) {
+						String encounterTag = fileMakerObs.getEncounter();
+						String fileMakerObsConcept = fileMakerObs.getConcept();
+						String fileMakerObsAnswer = fileMakerObs.getAnswer();
+						String fileMakerObsComment = fileMakerObs.getComment();
+						if (encounterTag != null && encounterTag.length() > 0 && fileMakerObsConcept != null && fileMakerObsConcept.length() > 0 && FileMakerObservationUtil.getConceptFormText(fileMakerObsConcept, formTag) != null) {
+							
+							FileMakerObservationUtil.createObs(encounterTag, FileMakerObservationUtil.getConceptFormText(fileMakerObsConcept, formTag), fileMakerObsAnswer, fileMakerObsComment, e, formTag);
+							
 						}
-						
 					}
 				}
+				
 				log.error(++i + ".===Turangije encounter " + e.getId());
+				
 			}
+			
+		}
+		catch (Exception e) {
+			log.error("===========Habaye ikibazo", e);
+		}
+		
+	}
+	
+	@Transactional
+	public void setOrthopedicAuthorComment() {
+		Map<String, Encounter> toIterate = new HashMap<String, Encounter>();
+		List<String> encountersRead = new CSVReader().readAllEncountersFromForm();
+		
+		ConceptService cs = Context.getConceptService();
+		Concept c = cs.getConcept("Old Encounter UUID");
+		List<Obs> obs = Context.getObsService().getObservationsByPersonAndConcept(null, c);
+		
+		for (Obs obs2 : obs) {
+			if (!obs2.isVoided() && obs2.getValueText() != null && obs2.getValueText().length() > 1 && encountersRead.contains(obs2.getValueText().trim())) {
+				toIterate.put(obs2.getValueText(), obs2.getEncounter());
+			}
+		}
+		
+		Encounter e = null;
+		Obs author = null;
+		
+		for (Entry<String, Encounter> entry : toIterate.entrySet()) {
+			e = entry.getValue();
+			FileMakerObservation filemakerObs = getAuthorObsByEncounterTag(entry.getKey());
+			String comment = filemakerObs.getComment();
+			
+			for (Obs o : e.getObs()) {
+				if (o.getConcept().getConceptId() == 3645) {
+					author = o;
+					
+					if (comment != null && comment.length() > 1) {
+						author.setComment(comment);
+					}
+				}
+				
+				if (author == null) {
+					Obs otherAuthor = new Obs();
+					otherAuthor.setConcept(cs.getConcept(3644));
+					otherAuthor.setPerson(e.getPatient().getPerson());
+					otherAuthor.setObsDatetime(e.getEncounterDatetime());
+					otherAuthor.setDateCreated(e.getDateCreated());
+					otherAuthor.setCreator(e.getCreator());
+					otherAuthor.setLocation(e.getLocation());
+					otherAuthor.setEncounter(e);
+				}
+			}
+			
+			Context.getObsService().saveObs(author, "Adding Author comment");
 		}
 		
 	}

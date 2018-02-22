@@ -101,4 +101,44 @@ public class CSVReader {
 		
 	}
 	
+	public ArrayList<String> readAllEncountersFromForm() {
+		
+		String csvFile = "/opt/openmrs/modules/allOrthopedicFollowupEncounters.txt";
+		BufferedReader br = null;
+		String line = "";
+		String cvsSplitBy = "\\|";
+		String[] untrimed = null;
+		ArrayList<String> diagnosis = new ArrayList<String>();
+		
+		try {
+			
+			br = new BufferedReader(new FileReader(csvFile));
+			while ((line = br.readLine()) != null) {
+				untrimed = line.split(cvsSplitBy);
+			}
+			
+			for (String string : untrimed) {
+				diagnosis.add(string.trim());
+			}
+			
+		}
+		catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		finally {
+			if (br != null) {
+				try {
+					br.close();
+				}
+				catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return diagnosis;
+		
+	}
 }

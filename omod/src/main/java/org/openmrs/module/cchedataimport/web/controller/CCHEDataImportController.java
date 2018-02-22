@@ -88,6 +88,12 @@ public class CCHEDataImportController {
 		return VIEW;
 	}
 	
+	@RequestMapping("/module/cchedataimport/createPhysicalTherapyObs")
+	public String createPhysicalTherapyObs() throws APIException, IOException {
+		fileMakerObservationService.createObsForForm("6841");
+		return VIEW;
+	}
+	
 	//Set form for encounters and corresponding obs
 	
 	@RequestMapping("/module/cchedataimport/setCleftLipPalateHistory")
@@ -132,6 +138,12 @@ public class CCHEDataImportController {
 		return VIEW;
 	}
 	
+	@RequestMapping("/module/cchedataimport/setPhysicalTherapy")
+	public String setPhysicalTherapy() throws APIException, IOException {
+		fileMakerObservationService.setEncounterObsForm("6841");
+		return VIEW;
+	}
+	
 	@RequestMapping("/module/cchedataimport/setOrthopaedicPlan")
 	public String setOrthopaedicPlan() throws APIException, IOException {
 		fileMakerObservationService.setEncounterObsForm("6823");
@@ -147,6 +159,24 @@ public class CCHEDataImportController {
 	@RequestMapping("/module/cchedataimport/setSkippedOrthopaedicFollowupObs")
 	public String setSkippedOrthopaedicFollowupObs() throws APIException, IOException {
 		fileMakerObservationService.setSkippedEncounterObsForm("6842");
+		return VIEW;
+	}
+	
+	@RequestMapping("/module/cchedataimport/importSkippedOrthopaedicOperativeReportObs")
+	public String importSkippedOrthopaedicOperativeReportObs() throws APIException, IOException {
+		fileMakerObservationService.createSkippedObsForForm("6843");
+		return VIEW;
+	}
+	
+	@RequestMapping("/module/cchedataimport/setSkippedOrthopaedicOperativeReportObs")
+	public String setSkippedOrthopaedicOperativeReportObs() throws APIException, IOException {
+		fileMakerObservationService.setSkippedEncounterObsForm("6843");
+		return VIEW;
+	}
+	
+	@RequestMapping("module/cchedataimport/setOrthopedicAuthorComment.form")
+	public String setOrthopedicAuthorComment() throws APIException, IOException {
+		fileMakerObservationService.setOrthopedicAuthorComment();
 		return VIEW;
 	}
 	

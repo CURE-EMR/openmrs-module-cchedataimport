@@ -43,9 +43,6 @@ public class FileMakerObservationUtil {
 					o = new Obs();
 					o.setConcept(question);
 					o.setValueCoded(valueCoded);
-					if (obsComment != null && obsComment.length() > 0) {
-						o.setComment(obsComment);
-					}
 				}
 			}
 			catch (Exception e2) {}
@@ -71,6 +68,10 @@ public class FileMakerObservationUtil {
 		if (o != null) {
 			o.setObsDatetime(e.getEncounterDatetime());
 			o.setLocation(e.getLocation());
+			
+			if (obsComment != null && obsComment.length() > 0) {
+				o.setComment(obsComment);
+			}
 			e.addObs(o);
 			Context.getEncounterService().saveEncounter(e);
 		}
@@ -90,6 +91,14 @@ public class FileMakerObservationUtil {
 		
 		if (formTag.equalsIgnoreCase("6834")) {
 			return ConceptNameToConceptIdMapping.getOrthopaedicHPMappings(text);
+		}
+		
+		if (formTag.equalsIgnoreCase("6823")) {
+			return ConceptNameToConceptIdMapping.getOrthopaedicPlanMappings(text);
+		}
+		
+		if (formTag.equalsIgnoreCase("6841")) {
+			return ConceptNameToConceptIdMapping.getPhysicalTherapyMappings(text);
 		}
 		return c;
 	}
