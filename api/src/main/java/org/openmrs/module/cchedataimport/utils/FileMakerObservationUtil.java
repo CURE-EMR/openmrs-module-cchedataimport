@@ -31,6 +31,7 @@ public class FileMakerObservationUtil {
 	 */
 	public static Obs createObs(String oldEncounterUUID, Concept question, String obsValue, String obsComment, Encounter e, String formTag) {
 		Obs o = null;
+		Obs commentObs = null;
 		if (question.getDatatype().isText() && obsComment != null && obsComment.length() > 0) {
 			o = new Obs();
 			o.setConcept(question);
@@ -46,6 +47,10 @@ public class FileMakerObservationUtil {
 				}
 			}
 			catch (Exception e2) {}
+			
+			if (obsComment != null && obsComment.length() > 0 && (question.getConceptId() == 3645 || question.getConceptId() == 3654 || question.getConceptId() == 3655)) {
+				commentObs = addComment(question.getConceptId(), obsComment);
+			}
 			
 		}
 		if (question.getDatatype().isDate()) {
@@ -68,14 +73,45 @@ public class FileMakerObservationUtil {
 		if (o != null) {
 			o.setObsDatetime(e.getEncounterDatetime());
 			o.setLocation(e.getLocation());
-			
-			if (obsComment != null && obsComment.length() > 0) {
-				o.setComment(obsComment);
-			}
 			e.addObs(o);
 			Context.getEncounterService().saveEncounter(e);
 		}
+		
+		if (commentObs != null) {
+			commentObs.setObsDatetime(e.getEncounterDatetime());
+			commentObs.setLocation(e.getLocation());
+			e.addObs(commentObs);
+			Context.getEncounterService().saveEncounter(e);
+		}
 		return o;
+	}
+	
+	public static Obs addComment(int question, String obsComment) {
+		ConceptService cs = Context.getConceptService();
+		Concept commentObsConcept = null;
+		Obs o = null;
+		switch (question) {
+			case 3645:
+				commentObsConcept = cs.getConcept(26299);
+				break;
+			case 3654:
+				commentObsConcept = cs.getConcept(26300);
+				break;
+			case 3655:
+				commentObsConcept = cs.getConcept(26301);
+				break;
+			
+			default:
+				break;
+		}
+		
+		if (commentObsConcept != null) {
+			o = new Obs();
+			o.setConcept(commentObsConcept);
+			o.setValueText(obsComment);
+		}
+		return o;
+		
 	}
 	
 	public static Concept getConceptFormText(String text, String formTag) {

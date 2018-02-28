@@ -9,14 +9,11 @@
  */
 package org.openmrs.module.cchedataimport.extension.html;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.openmrs.api.APIException;
 import org.openmrs.module.Extension;
 import org.openmrs.module.web.extension.AdministrationSectionExt;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * This class defines the links that will appear on the administration page under the
@@ -86,6 +83,9 @@ public class AdminList extends AdministrationSectionExt {
 		
 		map.put("module/cchedataimport/importSkippedOrthopaedicOperativeReportObs.form", "cchedataimport.importSkippedOrthopaedicOperativeReportObs");
 		map.put("module/cchedataimport/setSkippedOrthopaedicOperativeReportObs.form", "cchedataimport.setSkippedOrthopaedicOperativeReportObs");
+		
+		map.put("module/cchedataimport/importSkippedOrthopaedicHPObs.form", "cchedataimport.importSkippedOrthopaedicHPObs");
+		map.put("module/cchedataimport/setSkippedOrthopaedicHPObs.form", "cchedataimport.setSkippedOrthopaedicHPObs");
 		
 		//Set Author comment
 		map.put("module/cchedataimport/setOrthopedicAuthorComment.form", "cchedataimport.setOrthopedicAuthorComment");

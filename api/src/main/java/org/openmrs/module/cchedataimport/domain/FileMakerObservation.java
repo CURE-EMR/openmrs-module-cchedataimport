@@ -37,7 +37,7 @@ public class FileMakerObservation {
 	@Column(name = "answer")
 	private String answer;
 	
-	@Column(name = "comment", columnDefinition = "LONGBLOB")
+	@Column(name = "comment")
 	private String comment;
 	
 	@Column(name = "form")

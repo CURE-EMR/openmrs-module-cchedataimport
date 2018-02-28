@@ -80,37 +80,48 @@ public class FileMakerObservationService {
 	public void createObsForForm(String formTag) {
 		List<Obs> obs = Context.getObsService().getObservationsByPersonAndConcept(null, Context.getConceptService().getConcept("Form Id"));
 		int i = 0;
-		for (Obs obs2 : obs) {
-			// Take the encounter if the tag is for the form we want
-			if (obs2.getValueText().equalsIgnoreCase(formTag)) {
-				Encounter e = obs2.getEncounter();
-				for (Obs obs3 : e.getObs()) {
-					
-					//Take the tag that links the encounter to FileMaker Observations
-					
-					if (obs3.getConcept().getConceptId() == 3764 && obs3.getValueText() != null && obs3.getValueText().length() > 0) {
+		Obs error = null;
+		
+		try {
+			
+			for (Obs obs2 : obs) {
+				// Take the encounter if the tag is for the form we want
+				if (obs2.getValueText().equalsIgnoreCase(formTag)) {
+					Encounter e = obs2.getEncounter();
+					for (Obs obs3 : e.getObs()) {
 						
-						//Get all Observations from FileMakerObs table for this encounter
+						error = obs3;
 						
-						List<FileMakerObservation> fileMakerObservations = getObsByEncounterTag(obs3.getValueText());
-						if (fileMakerObservations.size() > 0) {
-							for (FileMakerObservation fileMakerObs : fileMakerObservations) {
-								String encounterTag = fileMakerObs.getEncounter();
-								String fileMakerObsConcept = fileMakerObs.getConcept();
-								String fileMakerObsAnswer = fileMakerObs.getAnswer();
-								String fileMakerObsComment = fileMakerObs.getComment();
-								if (encounterTag != null && encounterTag.length() > 0 && fileMakerObsConcept != null && fileMakerObsConcept.length() > 0 && FileMakerObservationUtil.getConceptFormText(fileMakerObsConcept, formTag) != null) {
-									
-									FileMakerObservationUtil.createObs(encounterTag, FileMakerObservationUtil.getConceptFormText(fileMakerObsConcept, formTag), fileMakerObsAnswer, fileMakerObsComment, e, formTag);
-									
+						//Take the tag that links the encounter to FileMaker Observations
+						
+						if (obs3.getConcept().getConceptId() == 3764 && obs3.getValueText() != null && obs3.getValueText().length() > 0) {
+							
+							//Get all Observations from FileMakerObs table for this encounter
+							
+							List<FileMakerObservation> fileMakerObservations = getObsByEncounterTag(obs3.getValueText());
+							if (fileMakerObservations.size() > 0) {
+								for (FileMakerObservation fileMakerObs : fileMakerObservations) {
+									String encounterTag = fileMakerObs.getEncounter();
+									String fileMakerObsConcept = fileMakerObs.getConcept();
+									String fileMakerObsAnswer = fileMakerObs.getAnswer();
+									String fileMakerObsComment = fileMakerObs.getComment();
+									if (encounterTag != null && encounterTag.length() > 0 && fileMakerObsConcept != null && fileMakerObsConcept.length() > 0 && FileMakerObservationUtil.getConceptFormText(fileMakerObsConcept, formTag) != null) {
+										
+										FileMakerObservationUtil.createObs(encounterTag, FileMakerObservationUtil.getConceptFormText(fileMakerObsConcept, formTag), fileMakerObsAnswer, fileMakerObsComment, e, formTag);
+										
+									}
 								}
 							}
+							
 						}
-						
 					}
+					log.error(++i + ".===Turangije encounter " + e.getId());
 				}
-				log.error(++i + ".===Turangije encounter " + e.getId());
 			}
+			
+		}
+		catch (Exception e) {
+			log.error("===========Habaye ikibazo" + error.getValueText(), e);
 		}
 		
 	}
@@ -182,34 +193,29 @@ public class FileMakerObservationService {
 		
 		Encounter e = null;
 		Obs author = null;
-		
+		int i = 0;
 		for (Entry<String, Encounter> entry : toIterate.entrySet()) {
 			e = entry.getValue();
 			FileMakerObservation filemakerObs = getAuthorObsByEncounterTag(entry.getKey());
 			String comment = filemakerObs.getComment();
 			
-			for (Obs o : e.getObs()) {
-				if (o.getConcept().getConceptId() == 3645) {
-					author = o;
-					
-					if (comment != null && comment.length() > 1) {
-						author.setComment(comment);
-					}
-				}
-				
-				if (author == null) {
-					Obs otherAuthor = new Obs();
-					otherAuthor.setConcept(cs.getConcept(3644));
-					otherAuthor.setPerson(e.getPatient().getPerson());
-					otherAuthor.setObsDatetime(e.getEncounterDatetime());
-					otherAuthor.setDateCreated(e.getDateCreated());
-					otherAuthor.setCreator(e.getCreator());
-					otherAuthor.setLocation(e.getLocation());
-					otherAuthor.setEncounter(e);
-				}
+			if (comment != null && e != null) {
+				author = new Obs();
+				author.setConcept(cs.getConcept(26301));
+				author.setValueText(comment);
+				author.setPerson(e.getPatient().getPerson());
+				author.setObsDatetime(e.getEncounterDatetime());
+				author.setDateCreated(e.getDateCreated());
+				author.setCreator(e.getCreator());
+				author.setLocation(e.getLocation());
+				author.setEncounter(e);
 			}
 			
-			Context.getObsService().saveObs(author, "Adding Author comment");
+			if (author != null && e != null) {
+				
+				Context.getObsService().saveObs(author, "Adding Author comment");
+				log.error(++i + ">>Turangije incounter ya " + e.getEncounterId());
+			}
 		}
 		
 	}
@@ -221,6 +227,11 @@ public class FileMakerObservationService {
 	
 	public void setSkippedEncounterObsForm(String formId) {
 		FileMakerObservationUtil.setSkippedEncounterObsForm(formId);
+		
+	}
+	
+	public void setObsGroup() {
+		// TODO Auto-generated method stub
 		
 	}
 	

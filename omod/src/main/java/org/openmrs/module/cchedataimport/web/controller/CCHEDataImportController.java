@@ -174,9 +174,27 @@ public class CCHEDataImportController {
 		return VIEW;
 	}
 	
+	@RequestMapping("/module/cchedataimport/importSkippedOrthopaedicHPObs")
+	public String importSkippedOrthopaedicHPObs() throws APIException, IOException {
+		fileMakerObservationService.createSkippedObsForForm("6834");
+		return VIEW;
+	}
+	
+	@RequestMapping("/module/cchedataimport/setSkippedOrthopaedicHPObs")
+	public String setSkippedOrthopaedicHPObs() throws APIException, IOException {
+		fileMakerObservationService.setSkippedEncounterObsForm("6834");
+		return VIEW;
+	}
+	
 	@RequestMapping("module/cchedataimport/setOrthopedicAuthorComment.form")
 	public String setOrthopedicAuthorComment() throws APIException, IOException {
 		fileMakerObservationService.setOrthopedicAuthorComment();
+		return VIEW;
+	}
+	
+	@RequestMapping("module/cchedataimport/setObsGroup.form")
+	public String setObsGroup() throws APIException, IOException {
+		fileMakerObservationService.setObsGroup();
 		return VIEW;
 	}
 	

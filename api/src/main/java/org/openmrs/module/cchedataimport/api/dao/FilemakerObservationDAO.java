@@ -41,8 +41,8 @@ public class FilemakerObservationDAO {
 		FileMakerObservation o = null;
 		Session session = getCurrentSession();
 		Criteria cr = session.createCriteria(FileMakerObservation.class);
-		cr.add(Restrictions.eq("concept", "Author"));
 		cr.add(Restrictions.eq("encounter", encounter));
+		cr.add(Restrictions.eq("concept", "Assistant"));
 		o = (FileMakerObservation) cr.list().get(0);
 		return o;
 	}
@@ -92,4 +92,5 @@ public class FilemakerObservationDAO {
 			}
 		}
 	}
+	
 }
